@@ -11,12 +11,12 @@ import UIKit
 
 class PhotoTableViewCell: UITableViewCell {
     
-    private let identifier = "PhotoTableViewCell"
-        
+    // MARK: - Properties
+    
     lazy var photoContainerView: UIView = {
-        let photoContainerView = UIView()
-        photoContainerView.translatesAutoresizingMaskIntoConstraints = false
-        return photoContainerView
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     lazy var itemImageView: UIImageView = {
@@ -26,15 +26,25 @@ class PhotoTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    // MARK: - Constants
+    
     static let reuseIdentifier = "PhotoTableViewCell"
+    
+    // MARK: - Initialization
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupView()
+        applyAutoLayout()
+    }
+    
+    // MARK: - Setup
+    
+    private func setupView() {
         selectionStyle = .none
         contentView.backgroundColor = .clear
         contentView.addSubview(photoContainerView)
         photoContainerView.addSubview(itemImageView)
-        applyAutoLayout()
     }
     
     private func applyAutoLayout() {
@@ -56,11 +66,30 @@ class PhotoTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Configuration
+    
     func configure(with model: FeaturedProduct) {
         if let url = URL(string: model.image ?? "") {
             itemImageView.kf.setImage(with: url)
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

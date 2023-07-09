@@ -10,19 +10,7 @@ import Foundation
 import SwiftyJSON
 import UIKit
 
-protocol ItemListProtocolDelegate: AnyObject {
-    func didFetchProduct(model:[FeaturedProduct])
- }
-
-
-class ItemListPresenter {
-    
-    weak var delegate: ItemListProtocolDelegate?
-
-    init(delegate: ItemListProtocolDelegate? = nil) {
-        self.delegate = delegate
-    }
-    
+class ItemListPresenter: BasePresenter {
     func fetch() {
         APIManager.fetchProducts { [weak self] result in
             switch result {
@@ -35,3 +23,5 @@ class ItemListPresenter {
         }
     }
 }
+
+

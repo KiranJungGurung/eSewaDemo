@@ -11,53 +11,54 @@ import UIKit
 
 typealias TableViewProtocol = UITableViewDelegate & UITableViewDataSource
 
-class ItemListViewController: BaseViewController, ItemListProtocolDelegate, TableViewProtocol{
+class ItemListViewController: BaseViewController, ItemProtocolDelegate, TableViewProtocol{
     
+    // MARK: - Properties
+
     var presenter: ItemListPresenter?
     var featuredProduct = [FeaturedProduct]()
 
-    lazy var itemListTableView: UITableView = {
-        let itemListTable = UITableView()
-        itemListTable.backgroundColor = .gray
-        itemListTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        return itemListTable
+    private lazy var itemListTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.backgroundColor = .gray
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        return tableView
     }()
-        
+    
+    // MARK: - View Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.addSubview(itemListTableView)
         view.backgroundColor = .cyan
+        
         setupTableView()
         setupPresenter()
         applyAutolayout()
         
         navigationItem.title = "Item List"
         navigationItem.leftBarButtonItem?.isHidden = true
-        
     }
-    func setupPresenter() {
+    
+    // MARK: - Setup
+
+    private func setupPresenter() {
         presenter = ItemListPresenter(delegate: self)
         presenter?.fetch()
       }
     
-    func didFetchProduct(model: [FeaturedProduct]) {
-        self.featuredProduct = model
-        itemListTableView.reloadData()
-    }
-    
     private func setupTableView() {
         itemListTableView.delegate = self
         itemListTableView.dataSource = self
-        
         itemListTableView.estimatedRowHeight = 300
         itemListTableView.rowHeight = UITableView.automaticDimension
         itemListTableView.backgroundColor = .clear
         itemListTableView.separatorStyle = .none
         itemListTableView.translatesAutoresizingMaskIntoConstraints = false
-
         itemListTableView.register(FeaturedTableViewCell.self, forCellReuseIdentifier: FeaturedTableViewCell.reuseIdentifier)
-        
     }
+    
     private func applyAutolayout(){
         NSLayoutConstraint.activate([
             itemListTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
@@ -66,9 +67,19 @@ class ItemListViewController: BaseViewController, ItemListProtocolDelegate, Tabl
             itemListTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
         ])
     }
+    
+    // MARK: - ItemProtocolDelegate
+
+    func didFetchProduct(model: [FeaturedProduct]) {
+        self.featuredProduct = model
+        itemListTableView.reloadData()
+    }
 }
 
+// MARK: - UITableViewDataSource & UITableViewDelegate
+
 extension ItemListViewController {
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -80,6 +91,7 @@ extension ItemListViewController {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = itemListTableView.dequeueReusableCell(withIdentifier: FeaturedTableViewCell.reuseIdentifier, for: indexPath) as! FeaturedTableViewCell
         cell.configure(model: self.featuredProduct)
+        
         cell.productClicked = { item in
             let viewController = ItemDetailViewController()
             viewController.featureData = item

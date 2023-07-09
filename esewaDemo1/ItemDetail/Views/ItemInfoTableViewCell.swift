@@ -5,56 +5,59 @@
 //  Created by Kiran Gurung on 20/06/2023.
 //
 
-
 import UIKit
 
 class ItemInfoTableViewCell: UITableViewCell {
-    
-    private let identifier = "ProductInfoTableViewCell"
-    
+        
+    // MARK: - Properties
+
     var item: FeaturedProduct?
     var footerViewData: ((FeaturedProduct) -> Void)?
     
     lazy var itemContainerView: UIView = {
-        let myContainerView = UIView()
-        myContainerView.translatesAutoresizingMaskIntoConstraints = false
-        myContainerView.backgroundColor = .white
-        return myContainerView
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white
+        return view
     }()
     
     lazy var itemTitleLabel: UILabel = {
-        let productTitle = UILabel()
-        productTitle.translatesAutoresizingMaskIntoConstraints = false
-        productTitle.textAlignment = .left
-        productTitle.font = .systemFont(ofSize: 18, weight: .bold)
-        productTitle.textColor = .black
-        return productTitle
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 18, weight: .bold)
+        label.textColor = .black
+        return label
     }()
     
     lazy var priceLabel: UILabel = {
-        let pricelbl = UILabel()
-        pricelbl.translatesAutoresizingMaskIntoConstraints = false
-        pricelbl.textAlignment = .left
-        pricelbl.font = .systemFont(ofSize: 26, weight: .medium)
-        pricelbl.textColor = .black
-        return pricelbl
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 26, weight: .medium)
+        label.textColor = .black
+        return label
     }()
     
     lazy var priceCrossedLabel: UILabel = {
-        let crossedPricelbl = UILabel()
-        crossedPricelbl.translatesAutoresizingMaskIntoConstraints = false
-        crossedPricelbl.textAlignment = .left
-        crossedPricelbl.font = .systemFont(ofSize: 16, weight: .medium)
-        crossedPricelbl.textColor = .gray
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .left
+        label.font = .systemFont(ofSize: 16, weight: .medium)
+        label.textColor = .gray
         let attributedText = NSAttributedString(
             string: "Rs.500.00",
             attributes: [.strikethroughStyle: NSUnderlineStyle.single.rawValue])
-        crossedPricelbl.attributedText = attributedText
-        return crossedPricelbl
+        label.attributedText = attributedText
+        return label
     }()
     
+    // MARK: - Constants
+
     static let reuseIdentifier = "ProductInfoTableViewCell"
     
+    // MARK: - Setup
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -64,8 +67,8 @@ class ItemInfoTableViewCell: UITableViewCell {
         itemContainerView.addSubview(priceLabel)
         itemContainerView.addSubview(priceCrossedLabel)
         applyAutoLayout()
-
     }
+    
     private func applyAutoLayout() {
         NSLayoutConstraint.activate([
             itemContainerView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -93,10 +96,11 @@ class ItemInfoTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Configuration
+
     func configure(with model: FeaturedProduct) {
         itemTitleLabel.text = model.title
         priceLabel.text = "Rs.\(model.price ?? 00)"
     }
-  
 }
 

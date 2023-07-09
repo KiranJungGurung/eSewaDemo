@@ -10,6 +10,8 @@ import UIKit
 
 class FeaturedCell: UICollectionViewCell {
     
+    // MARK: - Properties
+    
     var model: FeaturedProduct?
     static let identifier = "FeaturedCell"
     
@@ -44,21 +46,21 @@ class FeaturedCell: UICollectionViewCell {
     }()
     
     lazy var productSubTitleLabel: UILabel = {
-        let subLabel = UILabel()
-        subLabel.textColor = .gray
-        subLabel.font = .systemFont(ofSize: 13, weight: .medium)
-        subLabel.translatesAutoresizingMaskIntoConstraints = false
-        subLabel.textAlignment = .left
-        return subLabel
+        let label = UILabel()
+        label.textColor = .gray
+        label.font = .systemFont(ofSize: 13, weight: .medium)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .left
+        return label
     }()
     
    lazy var priceLabel: UILabel = {
-        let priceLabel = UILabel()
-        priceLabel.font = UIFont.systemFont(ofSize: 16)
-        priceLabel.textAlignment = .left
-        priceLabel.translatesAutoresizingMaskIntoConstraints = false
-        priceLabel.textColor = UIColor(red: 48/255, green: 219/255, blue: 65/255, alpha: 1.0)
-        return priceLabel
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor(red: 48/255, green: 219/255, blue: 65/255, alpha: 1.0)
+        return label
     }()
     
     lazy var likeButton: UIButton = {
@@ -103,8 +105,8 @@ class FeaturedCell: UICollectionViewCell {
         containerView.addSubview(addContainerView)
         addContainerView.addSubview(addButton)
         applyAutoLayout()
-        
     }
+    
     private func applyAutoLayout() {
         NSLayoutConstraint.activate([
             featuredImageView.topAnchor.constraint(equalTo: contentView.topAnchor,constant: 10),
@@ -163,9 +165,10 @@ class FeaturedCell: UICollectionViewCell {
     }
     
     private func setupImageView() {
-        if let urlString = model?.image, let url = URL(string: urlString) {
-            featuredImageView.kf.setImage(with: url)
+        guard let urlString = model?.image, let url = URL(string: urlString) else {
+            return
         }
+        featuredImageView.kf.setImage(with: url)
     }
 
     private func setupLabels() {
@@ -173,16 +176,6 @@ class FeaturedCell: UICollectionViewCell {
         productSubTitleLabel.text = model?.category
         priceLabel.text = "Rs. \(model?.price ?? 1)"
     }
-  
-//    func configure(with model: FeaturedProduct) {
-//        self.model = model
-//        if let url = URL(string: model.image ?? "") {
-//            featuredImageView.kf.setImage(with: url)
-//        }
-//        productTitleLabel.text = model.title
-//        productSubTitleLabel.text = model.category
-//        priceLabel.text = "Rs. \(model.price ?? 1)"
-//    }
 }
 
 

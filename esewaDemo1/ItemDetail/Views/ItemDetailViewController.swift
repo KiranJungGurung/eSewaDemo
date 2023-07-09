@@ -9,53 +9,62 @@
 import Kingfisher
 import UIKit
 
-
 class ItemDetailViewController: BaseViewController, TableViewProtocol{
+
+    // MARK: - Properties
 
     var itemDetailSections = [0,1,2,3]
     var featureData: FeaturedProduct?
 
-    lazy var itemDetailTableView: UITableView = {
-        let productTable = UITableView()
-        productTable.separatorStyle = .none
-        productTable.separatorColor = .clear
-        productTable.backgroundColor = .white
-        productTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        return productTable
-
+    private lazy var itemDetailTableView: UITableView = {
+        let tableView = UITableView()
+        tableView.separatorStyle = .none
+        tableView.separatorColor = .clear
+        tableView.backgroundColor = .white
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        return tableView
     }()
+
+    // MARK: - View Lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(itemDetailTableView)
+        setupView()
         setupTableView()
         applyAutoLayout()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        itemDetailTableView.frame = view.bounds
+    }
+    
+    // MARK: - Setup
 
+    private func setupView() {
+        view.addSubview(itemDetailTableView)
+    
         let backButton = UIButton(type: .system)
         backButton.setImage(UIImage(systemName: "chevron.backward"), for: .normal)
         backButton.translatesAutoresizingMaskIntoConstraints = false
         backButton.tintColor = .black
-        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
-
-        navigationItem.title = "Item Detail"
-        itemDetailTableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: PhotoTableViewCell.reuseIdentifier)
-        itemDetailTableView.register(ItemInfoTableViewCell.self, forCellReuseIdentifier: ItemInfoTableViewCell.reuseIdentifier)
-        itemDetailTableView.register(DescriptionTableViewCell.self, forCellReuseIdentifier: DescriptionTableViewCell.reuseIdentifier)
-
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.title = "Item Detail"
     }
 
     private func setupTableView() {
-
         itemDetailTableView.delegate = self
         itemDetailTableView.dataSource = self
-
         itemDetailTableView.backgroundColor = .clear
-//        itemDetailTableView.separatorStyle = .singleLine
-//        itemDetailTableView.separatorColor = .none
         itemDetailTableView.translatesAutoresizingMaskIntoConstraints = false
         
+        itemDetailTableView.register(PhotoTableViewCell.self, forCellReuseIdentifier: PhotoTableViewCell.reuseIdentifier)
+        itemDetailTableView.register(ItemInfoTableViewCell.self, forCellReuseIdentifier: ItemInfoTableViewCell.reuseIdentifier)
+        itemDetailTableView.register(DescriptionTableViewCell.self, forCellReuseIdentifier: DescriptionTableViewCell.reuseIdentifier)
     }
+    
     private func applyAutoLayout() {
         NSLayoutConstraint.activate([
             itemDetailTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
@@ -64,16 +73,15 @@ class ItemDetailViewController: BaseViewController, TableViewProtocol{
             itemDetailTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
         ])
     }
+    
+    // MARK: - Event Handlers
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        itemDetailTableView.frame = view.bounds
-    }
     @objc override func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
-    
 }
+
+// MARK: - UITableViewDataSource & UITableViewDelegate
 
 extension ItemDetailViewController {
     func numberOfSections(in tableView: UITableView) -> Int {

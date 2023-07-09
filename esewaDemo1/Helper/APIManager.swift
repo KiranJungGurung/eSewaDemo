@@ -13,7 +13,9 @@ import UIKit
 typealias Handler = (Result<[FeaturedProduct], Error>) -> Void
 
 class APIManager {
+    
     static func fetchProducts(completion: @escaping Handler) {
+        
         let url = URL(string: getProductURL)
         AF.request(url!).responseJSON { response in
             switch response.result {
